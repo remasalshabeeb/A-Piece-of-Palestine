@@ -5,6 +5,7 @@ import { verifyToken, verifyAdmin } from "../middleware/auth.Middleware.js";
 const router = express.Router()
 
 router.get("/Categories", gerAllCategories)
-router.post("/Category", createCategory);
+
+router.post("/Category", verifyToken, verifyAdmin, createCategory);
 
 export default router

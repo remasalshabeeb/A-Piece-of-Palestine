@@ -12,7 +12,7 @@ import { verifyToken as protect, verifyAdmin as adminOnly } from "../middleware/
 
 const router = express.Router();
 
-router.get("/users", adminOnly, getAllUsers);
+router.get("/users", protect, adminOnly, getAllUsers);
 router.get("/user/:id", protect, getUserById);
 router.get("/user-email", protect, getUserByEmail); // سنضيف هذه الدالة للـ Controller
 router.put("/user/:id", protect, updateUser);

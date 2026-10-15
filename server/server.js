@@ -5,6 +5,8 @@ import dotenv from "dotenv";
 import CategoriesRoutes from "./src/routes/category.Routes.js";
 import authRoutes from "./src/routes/auth.Routes.js"
 import userRoutes from "./src/routes/user.Routes.js";
+import adminRoutes from "./src/routes/admin.Routes.js";
+import cors from "cors";
 //dotenv
 dotenv.config();
 
@@ -13,6 +15,14 @@ dotenv.config();
 const app= express();
 app.use(express.json());
 connectDb();
+
+app.use(
+    cors({
+      origin:"http://localhost:5173",
+      methods:['PUT','POST', 'DELETE','PATCH','GET'],
+      credentials:true
+    })
+)
 
 
 app.get("/H", (req,res)=>{
@@ -23,6 +33,7 @@ app.get("/H", (req,res)=>{
 app.use('/api', CategoriesRoutes);
 app.use('/api', authRoutes);
 app.use('/api', userRoutes);
+app.use("/api/admin", adminRoutes);
 
 
 
