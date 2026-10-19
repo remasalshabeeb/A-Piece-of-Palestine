@@ -1,23 +1,37 @@
+
 import express from "express";
-import { 
-  getAllUsers, 
-  getUserById, 
-  getUserByEmail, 
-  updateUser, 
-  changePassword, 
-  deleteUser, 
-  updateUserRole 
+
+import {
+  getUserById,
+  getUserByEmail,
+  updateUser,
+  changePassword,
+  deleteUser,
 } from "../controller/user.Controller.js";
-import { verifyToken as protect, verifyAdmin as adminOnly } from "../middleware/auth.Middleware.js";
+
+import {
+  verifyToken,
+} from "../middleware/auth.Middleware.js";
 
 const router = express.Router();
 
-router.get("/users", protect, adminOnly, getAllUsers);
-router.get("/user/:id", protect, getUserById);
-router.get("/user-email", protect, getUserByEmail); // سنضيف هذه الدالة للـ Controller
-router.put("/user/:id", protect, updateUser);
-router.put("/change-password/:id", protect, changePassword); // وسنضيف هذه أيضاً
-router.delete("/user/:id", protect, deleteUser);
-router.put("/update-user-role/:id", protect, adminOnly, updateUserRole); // وسنضيف هذه للأدمن
+// All user routes require authentication.
+router.use(verifyToken);
+
+// Get a user's own profile (or another profile if the requester is an admin).
+router.get("/user/:id", getUserById);
+
+// Find the current user's profile by email.
+// Administrators may also search for another user's email.
+router.get("/user-email", getUserByEmail);
+
+// Update profile information; role changes are not allowed here.
+router.put("/user/:id", updateUser);
+
+// Change the password of the authenticated user's own account.
+router.put("/change-password/:id", changePassword);
+
+// Delete the authenticated user's own account.
+router.delete("/user/:id", deleteUser);
 
 export default router;

@@ -6,17 +6,24 @@ const categorySchema = new mongoose.Schema(
     {
         name: {
             type:String,
-            required: true,
-            unique : true
+            required: [true, "Category name is required."],
+            unique: true,
+            trim: true,
+            minlength: 2,
+            maxlength: 100,
         },
         description:{
             type:String,
+            trim: true,
+            maxlength: 1000,
+            default: "",
         },
     },
     {
         timestamps: true,
     },
 )
+//categorySchema.index({ name: 1 }, { unique: true });
 
 const Category = mongoose.model("Category", categorySchema);
 export default Category;
